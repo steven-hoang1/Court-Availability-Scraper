@@ -1,13 +1,13 @@
 class SuburbMapper:
     @staticmethod
-    def Map(facilityNumber):
-        if facilityNumber == 1:
+    def Map(locationNumber):
+        if locationNumber == 2:
             return "Surry Hills"
-        elif facilityNumber == 2:   
+        elif locationNumber == 3:   
             return "Alexandria"
-        elif facilityNumber == 3:
+        elif locationNumber == 4:
             return "Beaconsfield"
-        elif facilityNumber == 4:
+        elif locationNumber == 5:
             return "Glebe"
-        elif facilityNumber == 5:
+        elif locationNumber == 6:
             return "Rosebery"

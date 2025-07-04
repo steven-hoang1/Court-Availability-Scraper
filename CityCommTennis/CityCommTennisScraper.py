@@ -25,61 +25,33 @@ class CityCommTennisScraper:
     
     def scrape(self):
         try:
+            today_full = datetime.date.today().strftime('%Y-%m-%d')
             # Step 1: Visit locations page
-            self.driver.get("https://www.citycommunitytennis.com.au/locations")
-
-            for i in range(1, 6):
+            for i in range(2, 7):
                 try:
-                    if(i <= 4):
-                        book_button = self.wait.until(
-                            EC.element_to_be_clickable((By.XPATH, f"//a[text()='Book' and contains(@href, 'https://jensenstennis.intrac.com.au/tennis/book.cfm?facility={i}')]"
-                        )))
+                    if i == 6:
+                        self.driver.get(f"https://jensenstennis.intrac.com.au/tennis/book.cfm?location=6&date={today_full}&court=283")
                     else:
-                        book_button = self.wait.until(
-                            EC.element_to_be_clickable((By.XPATH, f"//a[text()='Book' and contains(@href, 'https://jensenstennis.intrac.com.au/tennis/book.cfm?location=6&court=283')]"
-                        )))
-
-                    book_button.click()
-
-                    self.driver.switch_to.window(self.driver.window_handles[-1])
-
-                    # Step 3: Wait for new booking site to load
-                    self.wait.until(EC.url_contains("jensenstennis.intrac.com.au"))
+                        self.driver.get(f"https://jensenstennis.intrac.com.au/tennis/book.cfm?location={i}&date={today_full}")
 
                     SuburbName = SuburbMapper.Map(i)
                     print(f"➡️ Suburb: {SuburbName}")
-
                     time.sleep(1)
 
+                    selected_dates = [self.driver.current_url]
 
-                    # Step 4: Get all .cal elements and extract date URLs
-                    self.wait.until(EC.presence_of_all_elements_located((By.CSS_SELECTOR, "td.cal")))
-                    cal_cells = self.driver.find_elements(By.CSS_SELECTOR, "td.cal")
-
-                    today = datetime.date.today().day
-                    today_full = datetime.date.today().strftime('%Y-%m-%d')
-                    if i == 5:
-                        today_url = "https://jensenstennis.intrac.com.au/tennis/book.cfm?location=6&court=283"
-                    else:
-                        today_url = f"https://jensenstennis.intrac.com.au/tennis/book.cfm?location={i+1}&date={today_full}"
-                    selected_dates = [today_url]
-
-                    for cell in cal_cells:
+                    for j in range(1,7):
                         try:
-                            link = cell.find_element(By.TAG_NAME, "a")
-                            href = link.get_attribute("href")
-                            date_str = href.split("-")[2][:2]
-                            date_num = int(date_str.lstrip('0'))
-                            if date_num >= today:
-                                selected_dates.append(href)
+                            date = (datetime.date.today() + datetime.timedelta(days=j)).strftime('%Y-%m-%d')
+                            if i == 6:
+                                date_url = f"https://jensenstennis.intrac.com.au/tennis/book.cfm?location=6&date={date}&court=283"
+                            else:
+                                date_url = f"https://jensenstennis.intrac.com.au/tennis/book.cfm?location={i}&date={date}"
+                            selected_dates.append(date_url)
                         except Exception as e:
+                            print(e)
                             continue
-                        
-                    selected_dates = selected_dates[:7]
-                        
-                    self.wait.until(EC.presence_of_all_elements_located((By.CSS_SELECTOR, "td.book")))
-                    book_cells = self.driver.find_elements(By.CSS_SELECTOR, "td.book")
-
+                            
                     available_times = []
                         
                     for date_url in selected_dates:
@@ -92,8 +64,7 @@ class CityCommTennisScraper:
                                 link = cell.find_element(By.TAG_NAME, "a")
                                 href = link.get_attribute("href")
                                 court = href.split("court=")[-1].split("%")[0]
-                                courtMapper = CourtMapper()
-                                court = courtMapper.Map(int(court))
+                                court = CourtMapper.Map(int(court))
                                 time_text = link.text.strip().split(" ")[-1]
                             
                                 if time_text:
@@ -102,8 +73,6 @@ class CityCommTennisScraper:
                                     
                             except Exception as e:
                                 continue
-                    self.driver.close()
-                    self.driver.switch_to.window(self.driver.window_handles[0])        
                     time.sleep(1)
                     selected_dates = []
                 except Exception as e:
