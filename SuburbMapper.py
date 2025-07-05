@@ -15,3 +15,7 @@ class SuburbMapper:
             return "Centennial Park"
         elif locationNumber == 72:
             return "Moore Park"
+        elif locationNumber == 43:
+            return "Langham Hotel"
+        elif locationNumber == 70: 
+            return "Camperdown"
