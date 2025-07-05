@@ -1,9 +1,8 @@
-from CityCommTennis.CityCommTennisScraper import CityCommTennisScraper
-from CentennialParklands.ParklandsScraper import ParklandsScraper
+from TennisCourtScraper import TennisCourtScraper
 
-# scraper = CityCommTennisScraper()
-# results = scraper.scrape()
+CityCommunityTennisUrl = "https://jensenstennis.intrac.com.au/tennis/book.cfm?location="
+ParklandsUrl = "https://parklands.intrac.com.au/sports/schedule.cfm?location="
 
-results_55 = ParklandsScraper().scrape(55)
-results_72 = ParklandsScraper().scrape(72)
+results = TennisCourtScraper.scrape(ParklandsUrl, 72)
+
 

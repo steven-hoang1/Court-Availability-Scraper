@@ -6,9 +6,10 @@ from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 import time
 import datetime
+from SuburbMapper import SuburbMapper
 from collections import defaultdict
 
-class ParklandsScraper:
+class TennisCourtScraper:
     def __init__(self):
         # Setup options
         options = Options()
@@ -20,32 +21,33 @@ class ParklandsScraper:
         self.driver = webdriver.Chrome(service=self.service, options=options)
         self.wait = WebDriverWait(self.driver, 15)
     
-    def scrape(self, locationNumber):
+    def scrape(self, url, locationNumber):
         try:
-            today_full = datetime.date.today().strftime('%Y-%m-%d')
-            # Step 1: Visit locations page
-            self.driver.get(f"https://parklands.intrac.com.au/sports/schedule.cfm?location={locationNumber}&date={today_full}")
+            today_date = datetime.date.today().strftime('%Y-%m-%d')
+            full_url = f"{url}{locationNumber}&date={today_date}&court=283" if (locationNumber == 6 and "jensenstennis" in url) else f"{url}{locationNumber}&date={today_date}"
             
-            if locationNumber == 55:
-                 print("➡️ Suburb: Centennial Park")
-            else:
-                print("➡️ Moore Park")
+            try:
+                self.driver.get(full_url)
+                SuburbName = SuburbMapper.Map(locationNumber)
+                print(f"➡️ Suburb: {SuburbName}")
+                time.sleep(1)
 
-            time.sleep(1) 
+                selected_dates = [self.driver.current_url]
 
-            selected_dates = [self.driver.current_url]
-
-            for j in range(1,7):
-                try:
-                    date = (datetime.date.today() + datetime.timedelta(days=j)).strftime('%Y-%m-%d')
-                    date_url = f"https://parklands.intrac.com.au/sports/schedule.cfm?location={locationNumber}&date={date}"
-                    selected_dates.append(date_url)
-                except Exception as e:
-                    print(e)
-                    continue
-            
-            for date_url in selected_dates:
-                try:
+                for j in range(1,7):
+                    try:
+                        date = (datetime.date.today() + datetime.timedelta(days=j)).strftime('%Y-%m-%d')
+                        if locationNumber == 6:
+                            date_url = f"{url}{locationNumber}&date={date}&court=283"
+                        else:
+                            date_url = f"{url}{locationNumber}&date={date}"
+                        selected_dates.append(date_url)
+                    except Exception as e:
+                        print(e)
+                        continue
+                        
+                    
+                for date_url in selected_dates:
                     self.driver.get(date_url)
                     self.wait.until(EC.presence_of_all_elements_located((By.CSS_SELECTOR, "td.book")))
                     book_cells = self.driver.find_elements(By.CSS_SELECTOR, "td.book")
@@ -63,10 +65,14 @@ class ParklandsScraper:
                                 time_slots[start_time] += 1
                         except Exception as e:
                             continue
-                    # Print all time slots with court count
+                # Print all time slots with court count
                     for time_str, count in sorted(time_slots.items()):
                         print(f"✅ {count} court(s) available at {time_str} on {date_url.split('date=')[-1][:10]}")
-                except Exception as e:
-                    continue
+                
+                time.sleep(1)
+                selected_dates = []
+            except Exception as e:
+                print(e)
+
         finally:
             self.driver.quit()

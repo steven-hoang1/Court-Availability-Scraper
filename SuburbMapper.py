@@ -11,3 +11,7 @@ class SuburbMapper:
             return "Glebe"
         elif locationNumber == 6:
             return "Rosebery"
+        elif locationNumber == 55:
+            return "Centennial Park"
+        elif locationNumber == 72:
+            return "Moore Park"
