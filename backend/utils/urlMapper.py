@@ -1,4 +1,4 @@
-import utils.constants as constants
+from .constants import constants
 
 class urlMapper:
     @staticmethod
