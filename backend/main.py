@@ -1,6 +1,6 @@
 from fastapi import FastAPI
-from scraper.TennisCourtScraper import TennisCourtScraper
-from utils.urlMapper import urlMapper
+from .scraper.TennisCourtScraper import TennisCourtScraper
+from .utils.urlMapper import urlMapper
 import traceback
 
 app = FastAPI()
