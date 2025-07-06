@@ -1,6 +1,6 @@
 import datetime
 from collections import defaultdict
-from SuburbMapper import SuburbMapper
+from utils.SuburbMapper import SuburbMapper
 from playwright.async_api import async_playwright
 
 
