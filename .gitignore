@@ -12,6 +12,7 @@ dist/
 venv/
 .env/
 .env.*
+.venv/
 
 # IDE files (optional)
 .vscode/
