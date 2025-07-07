@@ -19,7 +19,7 @@ class TennisCourtScraper:
             await page.goto(full_url)
 
             suburb_name = SuburbMapper.Map(location_number)
-            print(f"➡️ Suburb: {suburb_name}")
+            # print(f"➡️ Suburb: {suburb_name}")
 
             selected_dates = [full_url]
             for j in range(1, 7):
@@ -51,7 +51,7 @@ class TennisCourtScraper:
                         continue
 
                 for time_str, count in sorted(time_slots.items()):
-                    print(f"✅ {count} court(s) available at {time_str} on {date_url.split('date=')[-1][:10]}")
+                    # print(f"✅ {count} court(s) available at {time_str} on {date_url.split('date=')[-1][:10]}")
                     results.append((time_str, count))
 
             await browser.close()
