@@ -1,13 +1,14 @@
-services:
-  - type: web
-    name: court-availability-api
-    env: python
-    region: oregon
-    buildCommand: pip install -r requirements.txt
-    startCommand: uvicorn backend.main:app --host 0.0.0.0 --port 10000
-    postBuildCommand: playwright install chromium
-    envVars:
-      - key: PYTHON_VERSION
-        value: "3.11"
-      - key: PYTHONPATH
-        value: backend
+# services:
+#   - type: web
+#     name: court-availability-api
+#     env: python
+#     region: oregon
+#     buildCommand: |
+#       pip install -r requirements.txt && playwright install chromium
+#     startCommand: uvicorn backend.main:app --host 0.0.0.0 --port 10000
+#     postBuildCommand: playwright install chromium
+#     envVars:
+#       - key: PYTHON_VERSION
+#         value: "3.11"
+#       - key: PYTHONPATH
+#         value: backend
