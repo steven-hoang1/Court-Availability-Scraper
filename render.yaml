@@ -1,6 +1,13 @@
 services:
   - type: web
     name: court-availability-api
-    env: docker
+    env: python
     region: oregon
-    plan: free
+    buildCommand: pip install -r requirements.txt
+    startCommand: uvicorn backend.main:app --host 0.0.0.0 --port 10000
+    postBuildCommand: playwright install chromium
+    envVars:
+      - key: PYTHON_VERSION
+        value: "3.11"
+      - key: PYTHONPATH
+        value: backend
