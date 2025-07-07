@@ -2,6 +2,7 @@ import datetime
 from collections import defaultdict
 from ..utils.SuburbMapper import SuburbMapper
 from playwright.async_api import async_playwright
+from domain.availability import Availability
 
 
 class TennisCourtScraper:
@@ -51,8 +52,11 @@ class TennisCourtScraper:
                         continue
 
                 for time_str, count in sorted(time_slots.items()):
-                    # print(f"✅ {count} court(s) available at {time_str} on {date_url.split('date=')[-1][:10]}")
-                    results.append((time_str, count))
+                    results.append(Availability(
+                        date=date_url.split('date=')[-1][:10],
+                        time=time_str,
+                        courts_available=count,
+                    ))
 
             await browser.close()
             return results
