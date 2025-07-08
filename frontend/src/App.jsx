@@ -5,7 +5,7 @@ function App() {
   const [data, setData] = useState(null);
 
   useEffect(() => {
-      fetch('http://3.104.109.133/scrape/location=6')
+      fetch('https://api-last-minute-tennis.com/scrape/location=6')
         .then((res) => res.json())
         .then((json) => setData(json))
         .catch((err) => console.error('API error:', err));
