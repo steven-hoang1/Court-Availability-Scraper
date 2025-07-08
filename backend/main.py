@@ -3,8 +3,23 @@ from .scraper.TennisCourtScraper import TennisCourtScraper
 from .utils.urlMapper import urlMapper
 import traceback
 import time
+from fastapi.middleware.cors import CORSMiddleware
+from fastapi import HTTPException
 
 app = FastAPI()
+
+origins = [
+    "https://lastminutetennis.netlify.app",
+    "http://localhost:5173",  # for local dev
+]
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 cache = {}  # key: location_id, value: (timestamp, data)
 CACHE_TTL = 300
@@ -35,4 +50,4 @@ async def scrape_parklands(location_id: int):
     except Exception as e:
         print("❌ Internal server error:")
         traceback.print_exc()
-        return {"error": str(e)}
+        raise HTTPException(status_code=500, detail=str(e))
