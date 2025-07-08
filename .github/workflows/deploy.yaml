@@ -42,6 +42,7 @@ jobs:
         key: ${{ secrets.EC2_KEY }}
         script: |
           aws ecr get-login-password --region ap-southeast-2 | docker login --username AWS --password-stdin ${{ secrets.AWS_ECR_ACCOUNT_URL }}
+          docker system prune -af --volumes
           docker pull ${{ secrets.AWS_ECR_ACCOUNT_URL }}:latest
           docker stop court-availability-container || true
           docker rm court-availability-container || true
