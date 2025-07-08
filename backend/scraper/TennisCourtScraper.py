@@ -7,8 +7,7 @@ from domain.availability import Availability
 
 class TennisCourtScraper:
     async def scrape(self, url, location_number):
-        aest_now = datetime.datetime.now() + datetime.timedelta(hours=10)
-        today_date = aest_now.strftime('%Y-%m-%d')
+        today_date = datetime.date.today().strftime('%Y-%m-%d')
 
         if location_number == 6 and "jensenstennis" in url:
             full_url = f"{url}{location_number}&date={today_date}&court=283"
