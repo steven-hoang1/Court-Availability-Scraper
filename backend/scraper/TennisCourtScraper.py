@@ -3,11 +3,13 @@ from collections import defaultdict
 from ..utils.SuburbMapper import SuburbMapper
 from playwright.async_api import async_playwright
 from domain.availability import Availability
+from zoneinfo import ZoneInfo
 
 
 class TennisCourtScraper:
     async def scrape(self, url, location_number):
-        today_date = datetime.date.today().strftime('%Y-%m-%d')
+        aest_now = datetime.now(ZoneInfo("Australia/Sydney"))
+        today_date = aest_now.strftime('%Y-%m-%d')
 
         if location_number == 6 and "jensenstennis" in url:
             full_url = f"{url}{location_number}&date={today_date}&court=283"
