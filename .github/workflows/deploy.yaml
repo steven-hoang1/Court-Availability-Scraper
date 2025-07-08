@@ -1,0 +1,38 @@
+name: Deploy to EC2
+
+on:
+  push:
+    branches: [main]  # or your deployment branch
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: 🧾 Checkout code
+      uses: actions/checkout@v3
+
+    - name: 🐳 Log in to Amazon ECR
+      uses: aws-actions/amazon-ecr-login@v1
+
+    - name: 📦 Build Docker image
+      run: |
+        docker build -t court-availability-api .
+        docker tag court-availability-api:latest ${{ secrets.AWS_ECR_ACCOUNT_URL }}:latest
+
+    - name: 📤 Push Docker image to ECR
+      run: |
+        docker push ${{ secrets.AWS_ECR_ACCOUNT_URL }}:latest
+
+    - name: 📡 Deploy on EC2 via SSH
+      uses: appleboy/ssh-action@v1.0.0
+      with:
+        host: ${{ secrets.EC2_HOST }}
+        username: ${{ secrets.EC2_USER }}
+        key: ${{ secrets.EC2_KEY }}
+        script: |
+          aws ecr get-login-password --region ap-southeast-2 | docker login --username AWS --password-stdin ${{ secrets.AWS_ECR_ACCOUNT_URL }}
+          docker pull ${{ secrets.AWS_ECR_ACCOUNT_URL }}:latest
+          docker stop court-availability-container || true
+          docker rm court-availability-container || true
+          docker run -d --name court-availability-container -p 80:10000 ${{ secrets.AWS_ECR_ACCOUNT_URL }}:latest
