@@ -13,7 +13,7 @@ CACHE_TTL = 300
 def root():
     return {"message": "Court Availability API is running 🚀"}
 
-@app.get("/scrape/{location_id}")
+@app.get("/scrape/location={location_id}")
 async def scrape_parklands(location_id: int):
     try:
         now = time.time()
