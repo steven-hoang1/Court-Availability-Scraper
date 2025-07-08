@@ -2,7 +2,7 @@ import './App.css'
 import { useEffect, useState } from 'react';
 
 function App() {
-  const [count, setCount] = useState(0)
+  const [data, setData] = useState(null);
 
   useEffect(() => {
       fetch('http://3.104.109.133/scrape/location=6')
