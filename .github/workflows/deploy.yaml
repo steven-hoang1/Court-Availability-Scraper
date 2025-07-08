@@ -45,4 +45,4 @@ jobs:
           docker pull ${{ secrets.AWS_ECR_ACCOUNT_URL }}:latest
           docker stop court-availability-container || true
           docker rm court-availability-container || true
-          docker run -d --name court-availability-container -p 80:10000 ${{ secrets.AWS_ECR_ACCOUNT_URL }}:latest
+          docker run -d --name court-availability-container -p 10000:10000 ${{ secrets.AWS_ECR_ACCOUNT_URL }}:latest
