@@ -12,32 +12,34 @@ function App() {
     }, []);
 
     return (
-    <div>
-      <h1>Surry Hills</h1>
-      {data ? (
-        <table>
-          <thead>
-            <tr>
-              <th>Date</th>
-              <th>Time</th>
-              <th>Courts Available</th>
-            </tr>
-          </thead>
-          <tbody>
-            {data.map((slot, idx) => (
-              <tr key={idx}>
-                <td>{slot.date}</td>
-                <td>{slot.time}</td>
-                <td>{slot.courts_available}</td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      ) : (
-        <p>Loading...</p>
-      )}
-    </div>
-  );
+      <div className={styles.container}>
+        <h1 className={styles.heading}>Surry Hills</h1>
+        {data ? (
+          <div className={styles.tableWrapper}>
+            <table className={styles.table}>
+              <thead>
+                <tr>
+                  <th className={styles.th}>Date</th>
+                  <th className={styles.th}>Time</th>
+                  <th className={styles.th}>Courts Available</th>
+                </tr>
+              </thead>
+              <tbody>
+                {data.map((slot, idx) => (
+                  <tr key={idx} className={styles.tr}>
+                    <td className={styles.td}>{slot.date}</td>
+                    <td className={styles.td}>{slot.time}</td>
+                    <td className={styles.td}>{slot.courts_available}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        ) : (
+          <p className={styles.loading}>Loading...</p>
+        )}
+      </div>
+    );
   }
 
 export default App;
