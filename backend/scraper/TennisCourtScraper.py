@@ -8,7 +8,7 @@ from zoneinfo import ZoneInfo
 
 class TennisCourtScraper:
     async def scrape(self, url, location_number):
-        aest_now = datetime.now(ZoneInfo("Australia/Sydney"))
+        aest_now = datetime.datetime.now(ZoneInfo("Australia/Sydney"))
         today_date = aest_now.strftime('%Y-%m-%d')
 
         if location_number == 6 and "jensenstennis" in url:
