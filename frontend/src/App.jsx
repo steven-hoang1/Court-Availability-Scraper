@@ -5,7 +5,7 @@ function App() {
   const [data, setData] = useState(null);
 
   useEffect(() => {
-      fetch('https://api-last-minute-tennis.com/scrape/location=55')
+      fetch('https://api-last-minute-tennis.com/scrape/location=2')
         .then((res) => res.json())
         .then((json) => setData(json))
         .catch((err) => console.error('API error:', err));
@@ -13,7 +13,7 @@ function App() {
 
     return (
       <div className="min-h-screen bg-blue-50 flex flex-col items-center py-10">
-        <h1 className="text-4xl text-blue-700 font-bold mb-8">Centennial Park</h1>
+        <h1 className="text-4xl text-blue-700 font-bold mb-8">Surry Hills</h1>
         {data ? (
           <div className="overflow-x-auto w-full max-w-2xl shadow-lg rounded-lg bg-white">
             <table className="min-w-full divide-y divide-blue-200">
