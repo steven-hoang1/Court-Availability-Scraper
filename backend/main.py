@@ -5,6 +5,7 @@ import traceback
 import time
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi import HTTPException
+import asyncio
 
 app = FastAPI()
 
@@ -28,26 +29,35 @@ CACHE_TTL = 300
 def root():
     return {"message": "Court Availability API is running 🚀"}
 
-@app.get("/scrape/location={location_id}")
+@app.get("/scrape/location/{location_id}")
 async def scrape_parklands(location_id: int):
     try:
-        now = time.time()
-
-        # Check cache
-        if location_id in cache:
-            cached_time, cached_data = cache[location_id]
-            if now - cached_time < CACHE_TTL:
-                print("💾 Returning cached data")
-                return cached_data
-            else:
-                print("⏰ Cache expired — scraping again")
-
-        url = urlMapper.Map(location_id)
-        scraper = TennisCourtScraper()
-        results = await scraper.scrape(url, location_id)
-        cache[location_id] = (now, results)
+        return await get_data(location_id)
+    except Exception as e:
+        print("❌ Internal server error:")
+        traceback.print_exc()
+        raise HTTPException(status_code=500, detail=str(e))
+    
+@app.get("/scrape/all")
+async def scrape_all():
+    try:
+        location_ids = [2, 3, 4, 5, 6, 55, 72, 43, 70]
+        tasks = [get_data(location_id) for location_id in location_ids]
+        results = await asyncio.gather(*tasks)
         return results
     except Exception as e:
         print("❌ Internal server error:")
         traceback.print_exc()
         raise HTTPException(status_code=500, detail=str(e))
+    
+async def get_data(location_id):
+    now = time.time()
+    if location_id in cache:
+        cached_time, cached_data = cache[location_id]
+        if now - cached_time < CACHE_TTL:
+            return {"location_id": location_id, "data": cached_data}
+    url = urlMapper.Map(location_id)
+    scraper = TennisCourtScraper()
+    data = await scraper.scrape(url, location_id)
+    cache[location_id] = (now, data)
+    return {"location_id": location_id, "data": data}

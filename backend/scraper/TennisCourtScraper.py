@@ -1,9 +1,8 @@
 import datetime
 from collections import defaultdict
-from ..utils.SuburbMapper import SuburbMapper
-from playwright.async_api import async_playwright
-from domain.availability import Availability
-
+from ..domain.availability import Availability
+import httpx
+from bs4 import BeautifulSoup
 
 class TennisCourtScraper:
     async def scrape(self, url, location_number):
@@ -15,14 +14,7 @@ class TennisCourtScraper:
         else:
             full_url = f"{url}{location_number}&date={today_date}"
 
-        async with async_playwright() as p:
-            browser = await p.chromium.launch(headless=True)
-            page = await browser.new_page()
-            await page.goto(full_url)
-
-            suburb_name = SuburbMapper.Map(location_number)
-            # print(f"➡️ Suburb: {suburb_name}")
-
+        async with httpx.AsyncClient(timeout=20) as client:
             selected_dates = [full_url]
             for j in range(1, 7):
                 date = (datetime.date.today() + datetime.timedelta(days=j)).strftime('%Y-%m-%d')
@@ -35,22 +27,25 @@ class TennisCourtScraper:
             results = []
 
             for date_url in selected_dates:
-                await page.goto(date_url)
-                await page.wait_for_selector("td.book", timeout=10000)
+                try:
+                    response = await client.get(date_url)
+                    response.raise_for_status()
+                    soup = BeautifulSoup(response.text, "html.parser")
+                    time_slots = defaultdict(int)
+                    book_cells = soup.select("td.book")
 
-                time_slots = defaultdict(int)
-                book_cells = await page.query_selector_all("td.book")
-
-                for cell in book_cells:
-                    try:
-                        link = await cell.query_selector("a")
-                        if link:
-                            href = await link.get_attribute("href")
-                            if "start=" in href:
-                                start_time = href.split("start=")[-1].split("&")[0]
-                                time_slots[start_time] += 1
-                    except:
-                        continue
+                    for cell in book_cells:
+                        try:
+                            link = cell.find("a")
+                            if link:
+                                href = link.get("href", "")
+                                if "start=" in href:
+                                    start_time = href.split("start=")[-1].split("&")[0]
+                                    time_slots[start_time] += 1
+                        except:
+                            continue
+                except Exception as e:
+                    print(e)
 
                 for time_str, count in sorted(time_slots.items()):
                     results.append(Availability(
@@ -59,5 +54,4 @@ class TennisCourtScraper:
                         courts_available=count,
                     ))
 
-            await browser.close()
             return results
