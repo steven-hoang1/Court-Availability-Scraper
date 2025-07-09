@@ -32,7 +32,7 @@ function App() {
 
   return (
     <div className={styles.container}>
-      <h1 className={styles.heading}>Surry Hills Court Availability 🎾</h1>
+      <h1 className={styles.heading}>Court Availabilities 🎾</h1>
 
       <button className={styles.refreshButton} onClick={loadInitialState}>
         Refresh Availability
