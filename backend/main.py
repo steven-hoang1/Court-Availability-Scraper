@@ -29,15 +29,6 @@ CACHE_TTL = 300
 def root():
     return {"message": "Court Availability API is running 🚀"}
 
-@app.get("/location/{location_id}")
-async def scrape_parklands(location_id: int):
-    try:
-        return await get_data(location_id)
-    except Exception as e:
-        print("❌ Internal server error:")
-        traceback.print_exc()
-        raise HTTPException(status_code=500, detail=str(e))
-    
 @app.get("/location/all")
 async def scrape_all():
     try:
@@ -45,6 +36,15 @@ async def scrape_all():
         tasks = [get_data(location_id) for location_id in location_ids]
         results = await asyncio.gather(*tasks)
         return results
+    except Exception as e:
+        print("❌ Internal server error:")
+        traceback.print_exc()
+        raise HTTPException(status_code=500, detail=str(e))
+    
+@app.get("/location/{location_id}")
+async def scrape_parklands(location_id: int):
+    try:
+        return await get_data(location_id)
     except Exception as e:
         print("❌ Internal server error:")
         traceback.print_exc()
