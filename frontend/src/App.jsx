@@ -1,46 +1,45 @@
-import './App.css'
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import styles from './App.module.css';
+import AvailabilityTable from './components/AvailabilityTable';
+import LoadingSpinner from './components/LoadingSpinner';
+import { fetchCourtAvailability } from './api/fetchCourtAvailability';
 
 function App() {
-  const [data, setData] = useState(null);
+  const [data, setData] = useState([]);
+  const [locationId, setLocationId] = useState(2); // could be controlled by a dropdown later
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState('');
 
   useEffect(() => {
-      fetch('https://api-last-minute-tennis.com/scrape/location=2')
-        .then((res) => res.json())
-        .then((json) => setData(json))
-        .catch((err) => console.error('API error:', err));
-    }, []);
+    loadData();
+  }, []);
 
-    return (
-      <div className={styles.container}>
-        <h1 className={styles.heading}>Surry Hills</h1>
-        {data ? (
-          <div className={styles.tableWrapper}>
-            <table className={styles.table}>
-              <thead>
-                <tr>
-                  <th className={styles.th}>Date</th>
-                  <th className={styles.th}>Time</th>
-                  <th className={styles.th}>Courts Available</th>
-                </tr>
-              </thead>
-              <tbody>
-                {data.map((slot, idx) => (
-                  <tr key={idx} className={styles.tr}>
-                    <td className={styles.td}>{slot.date}</td>
-                    <td className={styles.td}>{slot.time}</td>
-                    <td className={styles.td}>{slot.courts_available}</td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-        ) : (
-          <p className={styles.loading}>Loading...</p>
-        )}
-      </div>
-    );
-  }
+  const loadData = async () => {
+    setLoading(true);
+    setError('');
+    try {
+      const result = await fetchCourtAvailability(locationId);
+      setData(result);
+    } catch (err) {
+      setError(err.message || 'Unknown error');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  return (
+    <div className={styles.container}>
+      <h1 className={styles.heading}>Surry Hills Court Availability 🎾</h1>
+
+      <button className={styles.refreshButton} onClick={loadData}>
+        Refresh Availability
+      </button>
+
+      {loading && <LoadingSpinner />}
+      {error && <p className={styles.error}>Error: {error}</p>}
+      {!loading && !error && data.length > 0 && <AvailabilityTable data={data} />}
+    </div>
+  );
+}
 
 export default App;
