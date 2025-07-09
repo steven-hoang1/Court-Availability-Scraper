@@ -29,7 +29,7 @@ CACHE_TTL = 300
 def root():
     return {"message": "Court Availability API is running 🚀"}
 
-@app.get("location/{location_id}")
+@app.get("/location/{location_id}")
 async def scrape_parklands(location_id: int):
     try:
         return await get_data(location_id)
@@ -38,7 +38,7 @@ async def scrape_parklands(location_id: int):
         traceback.print_exc()
         raise HTTPException(status_code=500, detail=str(e))
     
-@app.get("location/all")
+@app.get("/location/all")
 async def scrape_all():
     try:
         location_ids = [2, 3, 4, 5, 6, 55, 72, 43, 70]
