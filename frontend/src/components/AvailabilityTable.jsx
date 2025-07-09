@@ -1,4 +1,3 @@
-// src/components/AvailabilityTable.jsx
 import styles from '../styles/AvailabilityTable.module.css';
 
 const AvailabilityTable = ({ data }) => {
