@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import styles from './App.module.css';
 import AvailabilityTable from './components/AvailabilityTable';
 import LoadingSpinner from './components/LoadingSpinner';
