@@ -26,7 +26,7 @@ class TennisCourtScraper:
                 selected_dates.append(date_url)
 
             results = []
-            time_slots = defaultdict(int)
+            
 
             for date_url in selected_dates:
                 try:
@@ -35,6 +35,8 @@ class TennisCourtScraper:
                     soup = BeautifulSoup(response.text, "html.parser")
                     book_cells = soup.select("td.book")
 
+                    time_slots = defaultdict(int)
+                    
                     for cell in book_cells:
                         try:
                             link = cell.find("a")

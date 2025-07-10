@@ -37,7 +37,6 @@ async def scrape_all():
         for location_id in location_ids:
             result = await get_data(location_id)
             results.append(result)
-            await asyncio.sleep(1)  # Delay between scrapes to avoid detection
         return results
     except Exception as e:
         print("❌ Internal server error:")
