@@ -49,11 +49,11 @@ class TennisCourtScraper:
                     print(f"❌ Scraping failed for {date_url}: {str(e)}")
                     continue
 
-            for time_str, count in sorted(time_slots.items()):
-                results.append(Availability(
-                    date=date_url.split('date=')[-1][:10],
-                    time=time_str,
-                    courts_available=count,
-                ))
+                for time_str, count in sorted(time_slots.items()):
+                    results.append(Availability(
+                        date=date_url.split('date=')[-1][:10],
+                        time=time_str,
+                        courts_available=count,
+                    ))
 
             return results
