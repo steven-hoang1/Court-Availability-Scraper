@@ -2,7 +2,6 @@ from fastapi import FastAPI
 from .scraper.TennisCourtScraper import TennisCourtScraper
 from .utils.urlMapper import urlMapper
 import traceback
-import time
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi import HTTPException
 import asyncio
@@ -29,12 +28,14 @@ CACHE_TTL = 300
 def root():
     return {"message": "Court Availability API is running 🚀"}
 
-@app.get("/location/all")
 async def scrape_all():
     try:
         location_ids = [2, 3, 4, 5, 6, 55, 72, 43, 70]
-        tasks = [get_data(location_id) for location_id in location_ids]
-        results = await asyncio.gather(*tasks)
+        results = []
+        for location_id in location_ids:
+            result = await get_data(location_id)
+            results.append(result)
+            await asyncio.sleep(1)
         return results
     except Exception as e:
         print("❌ Internal server error:")

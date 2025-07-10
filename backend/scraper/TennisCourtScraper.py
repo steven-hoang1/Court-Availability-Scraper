@@ -3,6 +3,7 @@ from collections import defaultdict
 from ..domain.availability import Availability
 import httpx
 from bs4 import BeautifulSoup
+from ..utils.constants import headers
 
 class TennisCourtScraper:
     async def scrape(self, url, location_number):
@@ -14,7 +15,7 @@ class TennisCourtScraper:
         else:
             full_url = f"{url}{location_number}&date={today_date}"
 
-        async with httpx.AsyncClient(timeout=20) as client:
+        async with httpx.AsyncClient(timeout=20, headers=headers) as client:
             selected_dates = [full_url]
             for j in range(1, 7):
                 date = (datetime.date.today() + datetime.timedelta(days=j)).strftime('%Y-%m-%d')
