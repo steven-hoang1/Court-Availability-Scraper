@@ -58,6 +58,18 @@ async def get_data(location_id):
             return {"location_id": location_id, "data": cached_data}
     url = urlMapper.Map(location_id)
     scraper = TennisCourtScraper()
-    data = await scraper.scrape(url, location_id)
-    cache[location_id] = (now, data)
-    return {"location_id": location_id, "data": data}
+    try:
+        data = await scraper.scrape(url, location_id)
+        cache[location_id] = (now, data)
+        return {"location_id": location_id, "data": data}
+    except Exception as e:
+        print(f"❌ Scraper failed for location {location_id}: {e}")
+
+        # Return stale cache if available
+        if location_id in cache:
+            _, cached_data = cache[location_id]
+            print(f"⚠️ Returning stale cache for location {location_id}")
+            return {"location_id": location_id, "data": cached_data}
+
+        # No cache fallback; raise to trigger 500
+        raise
