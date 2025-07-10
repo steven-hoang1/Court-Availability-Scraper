@@ -25,35 +25,35 @@ class TennisCourtScraper:
                 selected_dates.append(date_url)
 
             results = []
+            time_slots = defaultdict(int)
 
             for date_url in selected_dates:
                 try:
                     response = await client.get(date_url)
                     response.raise_for_status()
                     soup = BeautifulSoup(response.text, "html.parser")
-                    time_slots = defaultdict(int)
                     book_cells = soup.select("td.book")
 
                     for cell in book_cells:
-                        link = cell.find("a")
-                        if link:
-                            href = link.get("href", "")
-                            if "start=" in href:
-                                start_time = href.split("start=")[-1].split("&")[0]
-                                time_slots[start_time] += 1
-
-                    for time_str, count in sorted(time_slots.items()):
-                        results.append(Availability(
-                            date=date_url.split('date=')[-1][:10],
-                            time=time_str,
-                            courts_available=count,
-                        ))                    
-                        
-                except httpx.HTTPStatusError as e:
-                    print(f"❌ HTTP error for {date_url}: {e.response.status_code}")
-                    continue
+                        try:
+                            link = cell.find("a")
+                            if link:
+                                href = link.get("href", "")
+                                if "start=" in href:
+                                    start_time = href.split("start=")[-1].split("&")[0]
+                                    time_slots[start_time] += 1
+                        except Exception as e:
+                            continue
                 except Exception as e:
+                    print(f"❌ HTTP error for {date_url}: {e.response.status_code}")
                     print(f"❌ Scraping failed for {date_url}: {str(e)}")
                     continue
+
+            for time_str, count in sorted(time_slots.items()):
+                results.append(Availability(
+                    date=date_url.split('date=')[-1][:10],
+                    time=time_str,
+                    courts_available=count,
+                ))
 
             return results
