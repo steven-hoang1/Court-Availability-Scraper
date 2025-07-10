@@ -8,12 +8,13 @@ import { aggregateCourtAvailability } from './utils/AvailabilitiesAdder';
 
 function App() {
   const [data, setData] = useState([]);
-  const [locationId, setLocationId] = useState("all");
+  const [locationId, setLocationId] = useState("70");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
 
   useEffect(() => {
     loadInitialState();
+    console.log("HELLO")
   }, []);
 
   const loadInitialState = async () => {
