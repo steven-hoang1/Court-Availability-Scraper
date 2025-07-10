@@ -51,13 +51,13 @@ async def scrape_parklands(location_id: int):
         raise HTTPException(status_code=500, detail=str(e))
     
 async def get_data(location_id):
-    now = time.time()
-    if location_id in cache:
-        cached_time, cached_data = cache[location_id]
-        if now - cached_time < CACHE_TTL:
-            return {"location_id": location_id, "data": cached_data}
+    # now = time.time()
+    # if location_id in cache:
+    #     cached_time, cached_data = cache[location_id]
+    #     if now - cached_time < CACHE_TTL:
+    #         return {"location_id": location_id, "data": cached_data}
     url = urlMapper.Map(location_id)
     scraper = TennisCourtScraper()
     data = await scraper.scrape(url, location_id)
-    cache[location_id] = (now, data)
+    # cache[location_id] = (now, data)
     return {"location_id": location_id, "data": data}
