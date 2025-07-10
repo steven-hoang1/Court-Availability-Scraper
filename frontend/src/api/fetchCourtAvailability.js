@@ -1,7 +1,9 @@
 export async function fetchCourtAvailability(locationId) {
-  const res = await fetch(`https://api-last-minute-tennis.com/location/${locationId}`);
-  if (!res.ok) {
-    throw new Error('Failed to fetch court availability');
-  }
-  return await res.json();
+    try {
+        const res = await fetch(`https://api-last-minute-tennis.com/location/${locationId}`);
+        return await res.json();
+    } catch (err) {
+    console.error('Caught fetch error:', err);
+    throw err;
+    }
 }

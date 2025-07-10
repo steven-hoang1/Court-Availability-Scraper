@@ -35,23 +35,25 @@ class TennisCourtScraper:
                     book_cells = soup.select("td.book")
 
                     for cell in book_cells:
-                        try:
-                            link = cell.find("a")
-                            if link:
-                                href = link.get("href", "")
-                                if "start=" in href:
-                                    start_time = href.split("start=")[-1].split("&")[0]
-                                    time_slots[start_time] += 1
-                        except:
-                            continue
-                except Exception as e:
-                    print(e)
+                        link = cell.find("a")
+                        if link:
+                            href = link.get("href", "")
+                            if "start=" in href:
+                                start_time = href.split("start=")[-1].split("&")[0]
+                                time_slots[start_time] += 1
 
-                for time_str, count in sorted(time_slots.items()):
-                    results.append(Availability(
-                        date=date_url.split('date=')[-1][:10],
-                        time=time_str,
-                        courts_available=count,
-                    ))
+                    for time_str, count in sorted(time_slots.items()):
+                        results.append(Availability(
+                            date=date_url.split('date=')[-1][:10],
+                            time=time_str,
+                            courts_available=count,
+                        ))                    
+                        
+                except httpx.HTTPStatusError as e:
+                    print(f"❌ HTTP error for {date_url}: {e.response.status_code}")
+                    continue
+                except Exception as e:
+                    print(f"❌ Scraping failed for {date_url}: {str(e)}")
+                    continue
 
             return results
