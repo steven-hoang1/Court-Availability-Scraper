@@ -18,18 +18,18 @@ function App() {
   }, []);
 
   const loadData = async (locId = locationId) => {
-  setLoading(true);
-  setError('');
-  try {
-    const availabilityData = await fetchCourtAvailability(locId);
-    const result = aggregateCourtAvailability(availabilityData);
-    setData(result.data);
-  } catch (err) {
-    setError(err.message || 'Unknown error');
-  } finally {
-    setLoading(false);
-  }
-};
+    setLoading(true);
+    setError('');
+    try {
+      const availabilityData = await fetchCourtAvailability(locId);
+      const result = aggregateCourtAvailability(availabilityData);
+      setData(result.data);
+    } catch (err) {
+      setError(err.message || 'Unknown error');
+    } finally {
+      setLoading(false);
+    }
+  };
 
   return (
     <div className={styles.container}>
