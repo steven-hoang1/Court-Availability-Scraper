@@ -17,3 +17,5 @@ venv/
 # IDE files (optional)
 .vscode/
 .idea/
+
+setup-new-ec2.txt
