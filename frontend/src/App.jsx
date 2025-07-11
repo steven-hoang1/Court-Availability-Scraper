@@ -67,6 +67,30 @@ function App() {
           <AvailabilityTable data={data} />
         </div>
       )}
+      <div className={styles.supportSection}>
+        <h2 className={styles.supportHeading}>Enjoying the service?</h2>
+        <p className={styles.supportText}>
+          If you find this helpful, consider supporting us:
+        </p>
+        <div className={styles.supportLinks}>
+          <a
+            href="https://buymeacoffee.com/lastminutetennis"
+            target="_blank"
+            rel="noopener noreferrer"
+            className={styles.supportButton}
+          >
+            ☕ Buy Me a Coffee
+          </a>
+          <a
+            href="https://amzn.to/46zH1Fj"
+            target="_blank"
+            rel="noopener noreferrer"
+            className={styles.supportButton}
+          >
+            🎾 Use our Link to Buy Tennis Balls
+          </a>
+        </div>
+      </div>
     </div>
   );
 }

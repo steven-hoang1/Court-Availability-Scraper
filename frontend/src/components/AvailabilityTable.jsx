@@ -24,7 +24,7 @@ const AvailabilityTable = ({ data }) => {
   const formattedDates = dates.map(formatDate);
 
   return (
-     <Table.ScrollArea borderWidth="1px" maxW="2xl" maxH="700px">
+     <Table.ScrollArea borderWidth="1px" maxW="2xl">
         <Table.Root stickyHeader={true} size="lg"  minW="600px">
         <Table.Header>
             <Table.Row bg="green.600">

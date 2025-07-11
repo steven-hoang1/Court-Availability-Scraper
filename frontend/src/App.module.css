@@ -7,6 +7,7 @@
   width: 100%;
   max-width: 100%;
   box-sizing: border-box;
+  background: white;
 }
 .heading {
   font-size: 2rem;
@@ -45,6 +46,7 @@
   overflow-x: auto;
   display: flex;
   justify-content: center;
+  background: white;
 }
 
 .label {
@@ -74,4 +76,47 @@
   border-color: #0070f3;
   outline: none;
   box-shadow: 0 0 0 3px rgba(0, 112, 243, 0.2);
+}
+
+.supportSection {
+  margin-top: 2rem;
+  padding: 1.5rem;
+  background-color: #f1f5f9;
+  border-radius: 8px;
+  text-align: center;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+}
+
+.supportHeading {
+  font-size: 1.25rem;
+  font-weight: bold;
+  margin-bottom: 0.5rem;
+  color: #1f2937;
+}
+
+.supportText {
+  font-size: 1rem;
+  margin-bottom: 1rem;
+  color: #4b5563;
+}
+
+.supportLinks {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.supportButton {
+  background-color: #0070f3;
+  color: white;
+  padding: 0.6rem 1.2rem;
+  font-size: 0.95rem;
+  border-radius: 6px;
+  text-decoration: none;
+  transition: background-color 0.2s ease;
+}
+
+.supportButton:hover {
+  background-color: #005ad6;
 }
