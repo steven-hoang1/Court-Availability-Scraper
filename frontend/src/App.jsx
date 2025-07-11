@@ -15,22 +15,21 @@ function App() {
 
   useEffect(() => {
     loadData();
-    console.log("HELLO")
   }, []);
 
-  const loadData = async () => {
-    setLoading(true);
-    setError('');
-    try {
-      const availabilityData = await fetchCourtAvailability(locationId);
-      const result = aggregateCourtAvailability(availabilityData);
-      setData(result.data);
-    } catch (err) {
-      setError(err.message || 'Unknown error');
-    } finally {
-      setLoading(false);
-    }
-  };
+  const loadData = async (locId = locationId) => {
+  setLoading(true);
+  setError('');
+  try {
+    const availabilityData = await fetchCourtAvailability(locId);
+    const result = aggregateCourtAvailability(availabilityData);
+    setData(result.data);
+  } catch (err) {
+    setError(err.message || 'Unknown error');
+  } finally {
+    setLoading(false);
+  }
+};
 
   return (
     <div className={styles.container}>
@@ -44,6 +43,7 @@ function App() {
           value={locationId}
           onChange={(e) => {
             const newLocationId = e.target.value;
+            console.log(newLocationId)
             setLocationId(newLocationId);
             loadData(newLocationId);
           }}
