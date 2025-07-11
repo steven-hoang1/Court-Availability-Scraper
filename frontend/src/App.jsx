@@ -55,7 +55,7 @@ function App() {
             </option>
           ))}
         </select>
-        <button className={styles.refreshButton} onClick={loadData} >
+        <button className={styles.refreshButton} onClick={loadData(locationId)} >
         Refresh
       </button>
       </Flex>
