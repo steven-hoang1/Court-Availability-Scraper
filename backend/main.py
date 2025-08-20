@@ -5,7 +5,6 @@ import traceback
 import time
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi import HTTPException
-import asyncio
 
 app = FastAPI()
 
