@@ -33,7 +33,7 @@ function App() {
 
   return (
     <div className={styles.container}>
-      <h1 className={styles.heading}>Court Availabilities 🎾</h1>
+      <h1 className={styles.heading}>Sydney Tennis Court Availabilities 🎾</h1>
       <Flex className={styles.locationSelector} gap="5" direction="row">
         <label htmlFor="location-select" className={styles.label}>
           Select Location:
@@ -43,7 +43,6 @@ function App() {
           value={locationId}
           onChange={(e) => {
             const newLocationId = e.target.value;
-            console.log(newLocationId)
             setLocationId(newLocationId);
             loadData(newLocationId);
           }}
@@ -64,7 +63,9 @@ function App() {
       
       {!loading && !error && data.length > 0 && (
         <div className={styles.tableWrapper}>
-          <AvailabilityTable data={data} />
+          <AvailabilityTable 
+            data={data}
+            locationUrl={locations.find(l => l.id == locationId)?.url} />
         </div>
       )}
       <div className={styles.supportSection}>

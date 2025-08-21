@@ -1,6 +1,6 @@
 import { Table } from "@chakra-ui/react"
 
-const AvailabilityTable = ({ data }) => {
+const AvailabilityTable = ({ data, locationUrl }) => {
   // Group by date, then by time
   const timeSet = new Set();
   const dateMap = {};
@@ -23,6 +23,8 @@ const AvailabilityTable = ({ data }) => {
   const dates = Object.keys(dateMap).sort();
   const formattedDates = dates.map(formatDate);
 
+  const d = new Date();
+
   return (
      <Table.ScrollArea borderWidth="1px" maxW="2xl">
         <Table.Root stickyHeader={true} size="lg"  minW="600px">
@@ -30,7 +32,16 @@ const AvailabilityTable = ({ data }) => {
             <Table.Row bg="green.600">
             <Table.ColumnHeader textAlign="center">Time</Table.ColumnHeader>
             {formattedDates.map((date) => (
-                <Table.ColumnHeader key={date} textAlign="center" py={2}>{date}</Table.ColumnHeader>
+                <Table.ColumnHeader key={date} textAlign="center" py={2}>
+                  <a 
+                    href={locationUrl + d.getFullYear() + '-' + (d.getMonth() + 1).toString().padStart(2, '0') + '-' + date.slice(-2)} 
+                    target="_blank" 
+                    rel="noopener noreferrer" 
+                    style={{ color: "black", textDecoration: "underline" }}
+                  >
+                    {date}
+                  </a>
+                  </Table.ColumnHeader>
             ))}
             </Table.Row>
         </Table.Header>
