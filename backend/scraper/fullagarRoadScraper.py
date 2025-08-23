@@ -24,7 +24,7 @@ class FullagarRoadScraper(BaseScraper):
                     "id": "Web_Ta_PublicVenueCourtHireAvailability",
                     "variables": {
                         "location": {"latitude": -37.8136, "longitude": 144.9631},
-                        "earliestStart": 0,       # midnight
+                        "earliestStart": 660,       # midnight
                         "latestStart": 1439,      # end of day
                         "duration": "60",
                         "date": date,
