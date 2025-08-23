@@ -11,3 +11,5 @@ class urlMapper:
             return constants.LANGHAM_HOTEL_URL
         elif locationNumber == 70:
             return constants.CAMPERDOWN_URL
+        elif locationNumber == 100:
+            return constants.FULLAGAR_URL
