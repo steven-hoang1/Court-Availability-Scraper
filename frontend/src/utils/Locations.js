@@ -9,6 +9,7 @@ const locations = [
   { id: 43, name: "Langham Hotel", url: "https://langham.intrac.com.au/tennis/book.cfm?location=43&date=" },
   { id: 70, name: "Camperdown", url: "https://camperdowntennis.intrac.com.au/tennis/book.cfm?location=70&date=" },
   { id: 100, name: "Fullagar Road Wentworthville", url: "https://play.tennis.com.au/court-hire/FullagarRoadTennisCourts#courthire" },
+  { id: 101, name: "Sydney Boys High School", url: "https://www.tennisvenues.com.au/booking/sydney-boys-high-school" },
 ];
 
 export default locations;
