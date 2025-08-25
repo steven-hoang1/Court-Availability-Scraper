@@ -1,6 +1,6 @@
 import { Table } from "@chakra-ui/react"
 
-const AvailabilityTable = ({ data, locationUrl }) => {
+const AvailabilityTable = ({ data, locationId, locationUrl }) => {
   // Group by date, then by time
   const timeSet = new Set();
   const dateMap = {};
@@ -34,7 +34,15 @@ const AvailabilityTable = ({ data, locationUrl }) => {
             {formattedDates.map((date) => (
                 <Table.ColumnHeader key={date} textAlign="center" py={2}>
                   <a 
-                    href={locationUrl + d.getFullYear() + '-' + (d.getMonth() + 1).toString().padStart(2, '0') + '-' + date.slice(-2)} 
+                    href={locationId >= 100
+                    ? locationUrl
+                    : locationUrl +
+                      d.getFullYear() +
+                      '-' +
+                      (d.getMonth() + 1).toString().padStart(2, '0') +
+                      '-' +
+                      date.slice(-2)
+                    } 
                     target="_blank" 
                     rel="noopener noreferrer" 
                     style={{ color: "black", textDecoration: "underline" }}

@@ -65,6 +65,7 @@ function App() {
         <div className={styles.tableWrapper}>
           <AvailabilityTable 
             data={data}
+            locationId={locationId}
             locationUrl={locations.find(l => l.id == locationId)?.url} />
         </div>
       )}
